@@ -1,0 +1,36 @@
+spring:
+  application:
+    name: web-game
+
+#  security:
+#    oauth2:
+#      client:
+#        provider:
+#          naver:
+#          kakao:
+#        registration:
+#          naver:
+#          kakao:
+
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 20MB
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/gamedb
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: Mlkfpt@2001
+
+  jpa:
+    hibernate:
+      ddl-auto: create # or validate, create-drop, none as needed
+
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+    show-sql: true
+    generate-ddl: true
+    defer-datasource-initialization: true
+
+jwt:
+  secret: v^K#V@igLXJrBvgY^%gKGy4-GsY51jrun:?C38FY?8h%]t_rd]E@nhL?de3tR>?
