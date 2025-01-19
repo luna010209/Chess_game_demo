@@ -1,18 +1,18 @@
-package com.example.game_web.authentication.event.vertify;
+package com.example.game_web.authentication.emailVerification.vertify;
 
-import com.example.game_web.authentication.user.entity.UserEntity;
 import com.example.game_web.base.EntityBase;
 import jakarta.persistence.Entity;
-import jakarta.persistence.OneToOne;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.Instant;
 import java.util.Date;
 
 @Getter
 @Entity
+@AllArgsConstructor
+@NoArgsConstructor
 public class VerifiedCode extends EntityBase {
     private Integer code;
     private Date expirationTime;

@@ -1,4 +1,4 @@
-package com.example.game_web.authentication.event.dto;
+package com.example.game_web.authentication.emailVerification.dto;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -7,4 +7,5 @@ import lombok.Setter;
 @Setter
 public class RequestEmail {
     private String email;
+    private Integer code;
 }

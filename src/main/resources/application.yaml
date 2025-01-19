@@ -18,10 +18,10 @@ spring:
       max-request-size: 20MB
 
   datasource:
-    url: jdbc:mysql://localhost:3306/gamedb
+    url: jdbc:mysql://localhost:3306/${database}
     driver-class-name: com.mysql.cj.jdbc.Driver
-    username: <username>
-    password: <password>
+    username: ${username}
+    password: ${password}
 
   jpa:
     hibernate:
@@ -32,5 +32,17 @@ spring:
     generate-ddl: true
     defer-datasource-initialization: true
 
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${your email}
+    password: ${your app-password}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
 jwt:
-  secret: v^K#V@igLXJrBvgY^%gKGy4-GsY51jrun:?C38FY?8h%]t_rd]E@nhL?de3tR>?
+  secret: ${jwt.secret}

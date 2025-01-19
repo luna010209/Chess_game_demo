@@ -1,4 +1,4 @@
-package com.example.game_web.authentication.event.dto;
+package com.example.game_web.authentication.emailVerification.listener;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -9,7 +9,6 @@ import org.springframework.context.ApplicationEvent;
 public class CompleteEvent extends ApplicationEvent {
     private String email;
     private Integer codeVerify;
-
 
     public CompleteEvent(String email, Integer code) {
         super(email);
