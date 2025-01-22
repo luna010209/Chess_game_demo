@@ -40,7 +40,7 @@ public class CompleteEventListener implements ApplicationListener<CompleteEvent>
                     "<p>Thank you for registering with us.<br>"+
                             "This is the verified code for your registration.</p>"+
                             "<b>"+ event.getCodeVerify() +"</b>"+
-                            "<p> Thank you <br><br>"+
+                            "<p> Thank you^^ <br><br>"+
                             "Your sincerely, <br> Luna Do";
             MimeMessage message = mailSender.createMimeMessage();
             var messageHelper = new MimeMessageHelper(message);
