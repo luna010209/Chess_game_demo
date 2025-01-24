@@ -16,11 +16,11 @@ import java.util.List;
 @RequiredArgsConstructor
 public class KnightMove {
     private final ChessPieceRepo pieceRepo;
-    public List<NewPosition> listMove(CurrentPosition current){
+    public List<NewPosition> listMove(CurrentPosition knight){
         List<NewPosition> listMove = new ArrayList<>();
-        ChessPiece knight = pieceRepo.findByPieceAndIsWhite("knight", current.isWhite()).orElseThrow(
-                ()-> new CustomException("Knight is not here", HttpStatus.BAD_REQUEST)
-        );
+//        ChessPiece knight = pieceRepo.findByPieceAndIsWhite("knight", current.isWhite()).orElseThrow(
+//                ()-> new CustomException("You lose knight", HttpStatus.BAD_REQUEST)
+//        );
         int rowCur = knight.getRowIdx();
         int colCur = knight.getColIdx();
         if (rowCur<7 && colCur<6 && !pieceRepo.existsByRowIdxAndColIdxAndIsWhite(rowCur + 1, colCur + 2, knight.isWhite()))

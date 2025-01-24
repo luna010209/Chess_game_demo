@@ -6,14 +6,11 @@ import com.example.game_web.chess.board.repo.ChessGameRepo;
 import com.example.game_web.chess.board.repo.ChessPieceRepo;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Service
-public class ChessService {
+public class ChessInitialService {
     private final ChessGameRepo gameRepo;
     private final ChessPieceRepo pieceRepo;
-    public ChessService(ChessGameRepo gameRepo, ChessPieceRepo pieceRepo){
+    public ChessInitialService(ChessGameRepo gameRepo, ChessPieceRepo pieceRepo){
         this.gameRepo = gameRepo;
         this.pieceRepo = pieceRepo;
         initializeGame();
@@ -22,8 +19,6 @@ public class ChessService {
     public void initializeGame(){
         ChessGame startGame = new ChessGame();
         gameRepo.save(startGame);
-//        List<ChessPiece> pieces = startGame.getPieces();
-        // Set up pawns
         for (int col=0; col<8; col++){
             pieceRepo.save(ChessPiece.builder()
                     .piece("pawn").isWhite(true).rowIdx(1).colIdx(col).chessGame(startGame)

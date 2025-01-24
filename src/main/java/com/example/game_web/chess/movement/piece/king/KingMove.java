@@ -20,11 +20,8 @@ public class KingMove {
     // All possible movement of king.
     public List<NewPosition> listMove(CurrentPosition king){
         List<NewPosition> listMove = new ArrayList<>();
-        ChessPiece kingPiece = pieceRepo.findByPieceAndIsWhite("king", king.isWhite()).orElseThrow(
-                ()-> new CustomException("King is not here", HttpStatus.BAD_REQUEST)
-        );
-        int rowPos = kingPiece.getRowIdx();
-        int colPos = kingPiece.getColIdx();
+        int rowPos = king.getRowIdx();
+        int colPos = king.getColIdx();
         if (colPos < 7 && !pieceRepo.existsByRowIdxAndColIdxAndIsWhite(rowPos, colPos + 1, king.isWhite()))
             listMove.add(NewPosition.builder().rowIdx(rowPos).colIdx(colPos + 1).build());
         if (colPos > 0 && !pieceRepo.existsByRowIdxAndColIdxAndIsWhite(rowPos, colPos - 1, king.isWhite()))
@@ -35,6 +32,5 @@ public class KingMove {
             listMove.add(NewPosition.builder().rowIdx(rowPos - 1).colIdx(colPos).build());
         return listMove;
     }
-
 
 }
