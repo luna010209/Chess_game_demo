@@ -27,41 +27,41 @@ public class RookMove {
         int colCur = rook.getColIdx();
         int rowCur = rook.getRowIdx();
         for (int col= colCur-1; col>=0; col--){
-            if (!pieceRepo.existsByRowIdxAndColIdxAndIsWhiteAndChessGame(
+            if (!pieceRepo.existsByRowIdxAndColIdxAndWhiteAndChessGame(
                     rowCur, col, rook.isWhite(), game
             )){
                 list.add(NewPosition.builder().rowIdx(rowCur).colIdx(col).build());
-                if (pieceRepo.existsByRowIdxAndColIdxAndIsWhiteAndChessGame(
+                if (pieceRepo.existsByRowIdxAndColIdxAndWhiteAndChessGame(
                         rowCur, col, !rook.isWhite(), game
                 )) break;
             } else break;
         }
         for (int col= colCur+1; col<8; col++){
-            if (!pieceRepo.existsByRowIdxAndColIdxAndIsWhiteAndChessGame(
+            if (!pieceRepo.existsByRowIdxAndColIdxAndWhiteAndChessGame(
                     rowCur, col, rook.isWhite(), game
             )){
                 list.add(NewPosition.builder().rowIdx(rowCur).colIdx(col).build());
-                if (pieceRepo.existsByRowIdxAndColIdxAndIsWhiteAndChessGame(
+                if (pieceRepo.existsByRowIdxAndColIdxAndWhiteAndChessGame(
                         rowCur, col, !rook.isWhite(), game
                 )) break;
             } else break;
         }
         for (int row= rowCur-1; row>=0; row--){
-            if (!pieceRepo.existsByRowIdxAndColIdxAndIsWhiteAndChessGame(
+            if (!pieceRepo.existsByRowIdxAndColIdxAndWhiteAndChessGame(
                     row, colCur, rook.isWhite(), game
             )){
                 list.add(NewPosition.builder().rowIdx(row).colIdx(colCur).build());
-                if (pieceRepo.existsByRowIdxAndColIdxAndIsWhiteAndChessGame(
+                if (pieceRepo.existsByRowIdxAndColIdxAndWhiteAndChessGame(
                         row, colCur, !rook.isWhite(), game
                 )) break;
             } else break;
         }
         for (int row= rowCur+1; row<8; row++){
-            if (!pieceRepo.existsByRowIdxAndColIdxAndIsWhiteAndChessGame(
+            if (!pieceRepo.existsByRowIdxAndColIdxAndWhiteAndChessGame(
                     row, colCur, rook.isWhite(), game
             )){
                 list.add(NewPosition.builder().rowIdx(row).colIdx(colCur).build());
-                if (pieceRepo.existsByRowIdxAndColIdxAndIsWhiteAndChessGame(
+                if (pieceRepo.existsByRowIdxAndColIdxAndWhiteAndChessGame(
                         row, colCur, !rook.isWhite(), game
                 )) break;
             } else break;

@@ -3,13 +3,18 @@ package com.example.game_web.chess.board.repo;
 import com.example.game_web.chess.board.entity.ChessGame;
 import com.example.game_web.chess.board.entity.ChessPiece;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.Optional;
 
 public interface ChessPieceRepo extends JpaRepository<ChessPiece, Long> {
-    boolean existsByRowIdxAndColIdxAndIsWhiteAndChessGame (int rowIdx, int colIdx, boolean isWhite, ChessGame chessGame);
-    boolean existsByPieceAndIsWhiteAndChessGame(String piece, boolean isWhite, ChessGame chessGame);
+    boolean existsByPieceAndWhiteAndChessGame(String piece, boolean isWhite, ChessGame chessGame);
+    boolean existsByRowIdxAndColIdxAndWhiteAndChessGame(int rowIdx, int colIdx, boolean isWhite, ChessGame chessGame);
     boolean existsByRowIdxAndColIdxAndChessGame(int rowIdx, int colIdx, ChessGame chessGame);
-    Optional<ChessPiece> findByPieceAndIsWhiteAndChessGame(String piece, boolean isWhite, ChessGame chessGame);
+    Optional<ChessPiece> findByPieceAndWhiteAndChessGame(String piece, boolean isWhite, ChessGame chessGame);
     Optional<ChessPiece> findByRowIdxAndColIdxAndChessGame(int rowIdx, int colIdx, ChessGame chessGame);
+
+    @Query("SELECT p FROM ChessPiece p JOIN FETCH p.chessGame WHERE p.id=:id")
+    ChessPiece pieceWithGame(@Param("id") Long id);
 }

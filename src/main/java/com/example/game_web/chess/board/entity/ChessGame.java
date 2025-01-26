@@ -16,8 +16,9 @@ import java.util.List;
 @Getter
 @Setter
 public class ChessGame extends EntityBase {
-    private boolean isWhiteTurn= true;
+    private boolean whiteTurn= true;
     private boolean KingDanger = false;
+    private boolean finish = false;
     @OneToMany(mappedBy = "chessGame")
     private final List<ChessPiece> pieces = new ArrayList<>();
 }

@@ -11,6 +11,6 @@ public class CurrentPosition {
     private Long gameId;
     private int rowIdx;
     private int colIdx;
-    private boolean isWhite;
+    private boolean white;
     private String piece;
 }

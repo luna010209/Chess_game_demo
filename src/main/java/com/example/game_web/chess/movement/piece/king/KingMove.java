@@ -27,13 +27,13 @@ public class KingMove {
         List<NewPosition> list = new ArrayList<>();
         int rowCur = king.getRowIdx();
         int colCur = king.getColIdx();
-        if (colCur < 7 && !pieceRepo.existsByRowIdxAndColIdxAndIsWhiteAndChessGame(rowCur, colCur + 1, king.isWhite(), game))
+        if (colCur < 7 && !pieceRepo.existsByRowIdxAndColIdxAndWhiteAndChessGame(rowCur, colCur + 1, king.isWhite(), game))
             list.add(NewPosition.builder().rowIdx(rowCur).colIdx(colCur + 1).build());
-        if (colCur > 0 && !pieceRepo.existsByRowIdxAndColIdxAndIsWhiteAndChessGame(rowCur, colCur - 1, king.isWhite(), game))
+        if (colCur > 0 && !pieceRepo.existsByRowIdxAndColIdxAndWhiteAndChessGame(rowCur, colCur - 1, king.isWhite(), game))
             list.add(NewPosition.builder().rowIdx(rowCur).colIdx(colCur - 1).build());
-        if (rowCur < 7 && !pieceRepo.existsByRowIdxAndColIdxAndIsWhiteAndChessGame(rowCur + 1, colCur, king.isWhite(), game))
+        if (rowCur < 7 && !pieceRepo.existsByRowIdxAndColIdxAndWhiteAndChessGame(rowCur + 1, colCur, king.isWhite(), game))
             list.add(NewPosition.builder().rowIdx(rowCur + 1).colIdx(colCur).build());
-        if (rowCur > 0 && !pieceRepo.existsByRowIdxAndColIdxAndIsWhiteAndChessGame(rowCur - 1, colCur, king.isWhite(), game))
+        if (rowCur > 0 && !pieceRepo.existsByRowIdxAndColIdxAndWhiteAndChessGame(rowCur - 1, colCur, king.isWhite(), game))
             list.add(NewPosition.builder().rowIdx(rowCur - 1).colIdx(colCur).build());
         return list;
     }

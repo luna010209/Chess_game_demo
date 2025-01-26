@@ -16,7 +16,7 @@ public class ChessPiece extends EntityBase {
     private String piece;
     private int colIdx;
     private int rowIdx;
-    private boolean isWhite;
+    private boolean white;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private ChessGame chessGame;

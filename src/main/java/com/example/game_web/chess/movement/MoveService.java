@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -25,34 +26,22 @@ public class MoveService {
     private final PawnMove pawn;
     private final QueenMove queen;
     private final RookMove rook;
-    public boolean checkMove(CurrentPosition current, NewPosition newPosition){
-        List<NewPosition> newPositions;
+    public List<NewPosition> validMove(CurrentPosition current){
+        List<NewPosition> newPositions = new ArrayList<>();
         if (current.getPiece().equals("king")){
             newPositions = king.listMove(current);
-            if (newPositions.contains(newPosition))
-                return true;
         } else if (current.getPiece().equals("bishop")){
             newPositions = bishop.listMove(current);
-            if (newPositions.contains(newPosition))
-                return true;
         } else if (current.getPiece().equals("knight")){
             newPositions = knight.listMove(current);
-            if (newPositions.contains(newPosition))
-                return true;
         } else if (current.getPiece().equals("pawn")){
             newPositions = pawn.listMove(current);
-            if (newPositions.contains(newPosition))
-                return true;
         } else if (current.getPiece().equals("queen")){
             newPositions = queen.listMove(current);
-            if (newPositions.contains(newPosition))
-                return true;
         } else if (current.getPiece().equals("rook")){
             newPositions = rook.listMove(current);
-            if (newPositions.contains(newPosition))
-                return true;
         }
-        return false;
+        return newPositions;
     }
 
 }

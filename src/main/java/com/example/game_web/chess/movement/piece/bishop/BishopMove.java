@@ -27,12 +27,12 @@ public class BishopMove {
         int rowCur = bishop.getRowIdx();
         int colLoop = colCur;
         for (int row = rowCur -1; row>=0; row--){
-            if (colLoop++<7 && !pieceRepo.existsByRowIdxAndColIdxAndIsWhiteAndChessGame(
+            if (colLoop++<7 && !pieceRepo.existsByRowIdxAndColIdxAndWhiteAndChessGame(
                     row, colLoop+++1, bishop.isWhite(), game
             )) {
                 list.add(NewPosition.builder().rowIdx(row).colIdx(colLoop+++1).build());
                 // If the position has opponent's piece, break the loop
-                if (pieceRepo.existsByRowIdxAndColIdxAndIsWhiteAndChessGame(
+                if (pieceRepo.existsByRowIdxAndColIdxAndWhiteAndChessGame(
                         row, colLoop+++1, !bishop.isWhite(), game
                 )) break;
             }
@@ -40,12 +40,12 @@ public class BishopMove {
         }
         colLoop = colCur;
         for (int row = rowCur -1; row>=0; row--){
-            if (colLoop-->0 && !pieceRepo.existsByRowIdxAndColIdxAndIsWhiteAndChessGame(
+            if (colLoop-->0 && !pieceRepo.existsByRowIdxAndColIdxAndWhiteAndChessGame(
                     row, colLoop---1, bishop.isWhite(), game
             )) {
                 list.add(NewPosition.builder().rowIdx(row).colIdx(colLoop---1).build());
                 // If the position has opponent's piece, break the loop
-                if (pieceRepo.existsByRowIdxAndColIdxAndIsWhiteAndChessGame(
+                if (pieceRepo.existsByRowIdxAndColIdxAndWhiteAndChessGame(
                         row, colLoop---1, !bishop.isWhite(), game
                 )) break;
             }
@@ -53,12 +53,12 @@ public class BishopMove {
         }
         colLoop = colCur;
         for (int row = rowCur +1; row<8; row++){
-            if (colLoop++<7 && !pieceRepo.existsByRowIdxAndColIdxAndIsWhiteAndChessGame(
+            if (colLoop++<7 && !pieceRepo.existsByRowIdxAndColIdxAndWhiteAndChessGame(
                     row, colLoop+++1, bishop.isWhite(), game
             )) {
                 list.add(NewPosition.builder().rowIdx(row).colIdx(colLoop+++1).build());
                 // If the position has opponent's piece, break the loop
-                if (pieceRepo.existsByRowIdxAndColIdxAndIsWhiteAndChessGame(
+                if (pieceRepo.existsByRowIdxAndColIdxAndWhiteAndChessGame(
                         row, colLoop+++1, !bishop.isWhite(), game
                 )) break;
             }
@@ -66,12 +66,12 @@ public class BishopMove {
         }
         colLoop = colCur;
         for (int row = rowCur +1; row<8; row++){
-            if (colLoop-->0 && !pieceRepo.existsByRowIdxAndColIdxAndIsWhiteAndChessGame(
+            if (colLoop-->0 && !pieceRepo.existsByRowIdxAndColIdxAndWhiteAndChessGame(
                     row, colLoop---1, bishop.isWhite(), game
             )) {
                 list.add(NewPosition.builder().rowIdx(row).colIdx(colLoop---1).build());
                 // If the position has opponent's piece, break the loop
-                if (pieceRepo.existsByRowIdxAndColIdxAndIsWhiteAndChessGame(
+                if (pieceRepo.existsByRowIdxAndColIdxAndWhiteAndChessGame(
                         row, colLoop---1, !bishop.isWhite(), game
                 )) break;
             }
