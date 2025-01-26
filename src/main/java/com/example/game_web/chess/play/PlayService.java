@@ -21,8 +21,8 @@ public class PlayService {
     private final ChessPieceRepo pieceRepo;
     private final ChessGameRepo gameRepo;
 
-    public ChessGame play(CurrentPosition current, NewPosition newPosition, Long gameId){
-        ChessGame game = gameRepo.findById(gameId).orElseThrow(
+    public ChessGame play(CurrentPosition current, NewPosition newPosition){
+        ChessGame game = gameRepo.findById(current.getGameId()).orElseThrow(
                 ()-> new CustomException("No exist game", HttpStatus.BAD_REQUEST)
         );
         ChessPiece pieceCurrent = pieceRepo.findByRowIdxAndColIdxAndChessGame(current.getRowIdx(), current.getColIdx(), game)
