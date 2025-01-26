@@ -33,7 +33,7 @@ public class PlayService {
             throw new CustomException("It's not your turn", HttpStatus.BAD_REQUEST);
         // Check if current piece can move or not
         if (pieceCurrent.getPiece().equals("king")){
-            List<NewPosition> newPositions = new KingMove(pieceRepo).listMove(current);
+            List<NewPosition> newPositions = new KingMove(gameRepo,  pieceRepo).listMove(current);
             if (newPositions.isEmpty() || !newPositions.contains(newPosition))
                 throw new CustomException("You cannot move here", HttpStatus.BAD_REQUEST);
         }
@@ -65,7 +65,7 @@ public class PlayService {
 
         // Check if king is threatened or not
             // 1. List of position that new piece can move
-        List<NewPosition> listMoveOfNewPos = new KingMove(pieceRepo).listMove(CurrentPosition.builder()
+        List<NewPosition> listMoveOfNewPos = new KingMove(gameRepo, pieceRepo).listMove(CurrentPosition.builder()
                         .rowIdx(pieceNew.getRowIdx()).colIdx(pieceNew.getColIdx())
                         .piece(pieceNew.getPiece()).isWhite(pieceNew.isWhite())
                 .build());
