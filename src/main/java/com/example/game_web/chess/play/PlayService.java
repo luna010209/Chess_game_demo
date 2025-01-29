@@ -9,6 +9,7 @@ import com.example.game_web.chess.movement.dto.CurrentPosition;
 import com.example.game_web.chess.movement.dto.NewPosition;
 import com.example.game_web.chess.play.dto.ResponseDto;
 import com.example.game_web.chess.play.dto.RequestDto;
+import com.example.game_web.chess.play.result.ResultService;
 import com.example.game_web.exceptionHandler.CustomException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -23,17 +24,20 @@ public class PlayService {
     private final ChessPieceRepo pieceRepo;
     private final ChessGameRepo gameRepo;
     private final MoveService moveService;
+    private final ResultService resultService;
 
     public ResponseDto play(RequestDto request){
         ChessGame game = gameRepo.findById(request.getGameId()).orElseThrow(
                 ()-> new CustomException("No exist game", HttpStatus.BAD_REQUEST)
         );
-        if (game.isFinish())
+//        if (game.isFinish())
+//            throw new CustomException("Game already finished!!", HttpStatus.BAD_REQUEST);
+
+        if (game.getStatus().equals(ChessGame.Status.WIN) || game.getStatus().equals(ChessGame.Status.DRAW))
             throw new CustomException("Game already finished!!", HttpStatus.BAD_REQUEST);
 
         ChessPiece pieceCurrent = pieceRepo.findByRowIdxAndColIdxAndChessGame(request.getRowCur(), request.getColCur(), game)
                 .orElseThrow(()-> new CustomException("No exist any pieces here", HttpStatus.BAD_REQUEST));
-
 
         // Check turn of player
         if (pieceCurrent.isWhite()!= game.isWhiteTurn())
@@ -43,6 +47,18 @@ public class PlayService {
         if (!moveService.validMove(new CurrentPosition(pieceCurrent.getChessGame().getId(), pieceCurrent.getRowIdx(), pieceCurrent.getColIdx(), pieceCurrent.isWhite(), pieceCurrent.getPiece()))
                 .contains(new NewPosition(request.getRowNew(), request.getColNew())))
             throw new CustomException("You cannot move here", HttpStatus.BAD_REQUEST);
+
+        // In case of 'king' piece, if the new position king move is under check, king cannot move over there.
+        if (pieceCurrent.getPiece().equals("king")){
+            List<ChessPiece> pieces = pieceRepo.findByWhiteAndChessGame(!pieceCurrent.isWhite(), game);
+            for (ChessPiece piece: pieces){
+                List<NewPosition> positions = moveService.validMove(
+                        new CurrentPosition(game.getId(), piece.getRowIdx(), piece.getColIdx(),piece.isWhite(), piece.getPiece())
+                );
+                if (positions.contains(new NewPosition(request.getRowNew(), request.getColNew())))
+                    throw new CustomException("King will be checked by opponent's "+ piece.getPiece(), HttpStatus.BAD_REQUEST);
+            }
+        }
 
         // Update new position
         Optional<ChessPiece> pieceNewPos = pieceRepo.findByRowIdxAndColIdxAndChessGame(request.getRowNew(), request.getColNew(), game);
@@ -69,8 +85,9 @@ public class PlayService {
         if (game.isKingDanger()) game.setKingDanger(false);
 
         // Check if the game finish(king was taken out or not)
-        if (!pieceRepo.existsByPieceAndWhiteAndChessGame("king", !game.isWhiteTurn(), game))
-            game.setFinish(true);
+//        if (!pieceRepo.existsByPieceAndWhiteAndChessGame("king", !game.isWhiteTurn(), game))
+//            game.setFinish(true);
+        resultService.draw(game.getId(), pieceCurrent.isWhite());
 
         // Change turn
         game.setWhiteTurn(!game.isWhiteTurn());
@@ -94,16 +111,6 @@ public class PlayService {
         return ResponseDto.fromEntity(pieceRepo.pieceWithGame(pieceNew.getId()));
     }
 
-//    public String finish(Long chessGameId){
-//        ChessGame game = gameRepo.findById(chessGameId).orElseThrow(
-//                ()-> new CustomException("No exist this game", HttpStatus.BAD_REQUEST)
-//        );
-//        if (!pieceRepo.existsByPieceAndIsWhiteAndChessGame("king", true, game))
-//            return "Black win!";
-//        else if (!pieceRepo.existsByPieceAndIsWhiteAndChessGame("king", false, game))
-//            return "White win!";
-//        return "Not yet finish";
-//    }
 
     // In case that pawn end up the row of opponent. -> pawn can be queen, rook, ...
     public ResponseDto pawnTo(RequestDto requestDto){
@@ -123,5 +130,7 @@ public class PlayService {
         pieceRepo.save(pawn);
         return ResponseDto.fromEntity(pieceRepo.pieceWithGame(pawn.getId()));
     }
+
+
 
 }

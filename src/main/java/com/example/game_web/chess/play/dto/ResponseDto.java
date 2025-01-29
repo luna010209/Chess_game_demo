@@ -19,6 +19,7 @@ public class ResponseDto {
     private boolean whiteTurn;
     private boolean kingDanger;
     private boolean finish;
+    private String status;
     public static ResponseDto fromEntity(ChessPiece piece){
         ResponseDto dto = ResponseDto.builder()
                 .pieceId(piece.getId())
@@ -30,6 +31,7 @@ public class ResponseDto {
                 .whiteTurn(piece.getChessGame().isWhiteTurn())
                 .kingDanger(piece.getChessGame().isKingDanger())
                 .finish(piece.getChessGame().isFinish())
+                .status(piece.getChessGame().getStatus().toString())
                 .build();
         return dto;
     }

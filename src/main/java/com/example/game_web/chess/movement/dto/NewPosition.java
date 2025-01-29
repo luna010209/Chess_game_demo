@@ -6,6 +6,7 @@ import lombok.*;
 @Setter
 @AllArgsConstructor
 @Builder
+@NoArgsConstructor
 @EqualsAndHashCode
 public class NewPosition {
     private int rowIdx;

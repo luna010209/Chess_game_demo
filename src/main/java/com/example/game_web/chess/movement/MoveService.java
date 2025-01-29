@@ -1,6 +1,7 @@
 package com.example.game_web.chess.movement;
 
 import com.example.game_web.chess.board.entity.ChessPiece;
+import com.example.game_web.chess.board.repo.ChessPieceRepo;
 import com.example.game_web.chess.movement.dto.CurrentPosition;
 import com.example.game_web.chess.movement.dto.NewPosition;
 import com.example.game_web.chess.movement.piece.bishop.BishopMove;
@@ -26,6 +27,7 @@ public class MoveService {
     private final PawnMove pawn;
     private final QueenMove queen;
     private final RookMove rook;
+    private final ChessPieceRepo chessPieceRepo;
     public List<NewPosition> validMove(CurrentPosition current){
         List<NewPosition> newPositions = new ArrayList<>();
         if (current.getPiece().equals("king")){
