@@ -5,6 +5,7 @@ import jakarta.persistence.Entity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.Instant;
 import java.util.Date;
@@ -13,6 +14,7 @@ import java.util.Date;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
+@Setter
 public class VerifiedCode extends EntityBase {
     private Integer code;
     private Date expirationTime;

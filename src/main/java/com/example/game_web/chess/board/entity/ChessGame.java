@@ -18,10 +18,13 @@ import java.util.List;
 @Getter
 @Setter
 public class ChessGame extends EntityBase {
+    @Builder.Default
     private boolean whiteTurn= true;
-    private boolean KingDanger = false;
-    private boolean finish = false;
+    @Builder.Default
+    private boolean kingDanger = false;
+//    private boolean finish = false;
 
+    @Builder.Default
     @Enumerated(EnumType.STRING)
     private Status status = Status.ONGOING;
     @OneToMany(mappedBy = "chessGame")

@@ -1,6 +1,8 @@
 package com.example.game_web.authentication.user.service;
 
 import com.example.game_web.authentication.component.UserComponent;
+import com.example.game_web.authentication.emailVerification.vertify.VerifiedCode;
+import com.example.game_web.authentication.emailVerification.vertify.VerifiedCodeRepo;
 import com.example.game_web.authentication.user.dto.UserDto;
 import com.example.game_web.authentication.user.dto.UserRequest;
 import com.example.game_web.authentication.user.dto.UserResponse;
@@ -24,6 +26,7 @@ public class UserService implements UserDetailsService {
     private final PasswordEncoder encoder;
     private final AuthorityRepo authorityRepo;
     private final UserComponent userComponent;
+    private final VerifiedCodeRepo codeRepo;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -36,7 +39,11 @@ public class UserService implements UserDetailsService {
     public UserDto newUser(UserRequest request){
         if (userRepo.existsByUsername(request.getUsername()))
             throw new CustomException("Username already exists!!!", HttpStatus.CONFLICT);
-        else if (userRepo.existsByEmail(request.getEmail()))
+        VerifiedCode email = codeRepo.findByEmail(request.getEmail()).orElseThrow(
+                ()-> new CustomException("Email is not verified yet", HttpStatus.BAD_REQUEST)
+        );
+        if (!email.isSuccess()) throw new CustomException("Email has not verified yet", HttpStatus.BAD_REQUEST);
+        if (userRepo.existsByEmail(request.getEmail()))
             throw new CustomException("Email already exists!!!", HttpStatus.CONFLICT);
         else if (!request.getPassword().equals(request.getConfirmPw()))
             throw new CustomException("Password and confirm password do not match!!!", HttpStatus.CONFLICT);

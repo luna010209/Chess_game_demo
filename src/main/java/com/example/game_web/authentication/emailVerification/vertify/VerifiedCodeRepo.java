@@ -6,4 +6,5 @@ import java.util.Optional;
 
 public interface VerifiedCodeRepo extends JpaRepository<VerifiedCode, Long> {
     Optional<VerifiedCode> findByEmail(String email);
+    boolean existsByEmailAndIsSuccess(String email, boolean isSuccess);
 }
