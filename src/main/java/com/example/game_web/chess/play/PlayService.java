@@ -12,6 +12,7 @@ import com.example.game_web.chess.play.dto.RequestDto;
 import com.example.game_web.chess.play.result.ResultService;
 import com.example.game_web.exceptionHandler.CustomException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +21,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class PlayService {
     private final ChessPieceRepo pieceRepo;
     private final ChessGameRepo gameRepo;
@@ -44,6 +46,7 @@ public class PlayService {
             throw new CustomException("It's not your turn", HttpStatus.BAD_REQUEST);
 
         // Check if current piece can move or not
+        log.info(moveService.validMove(new CurrentPosition(pieceCurrent.getChessGame().getId(), pieceCurrent.getRowIdx(), pieceCurrent.getColIdx(), pieceCurrent.isWhite(), pieceCurrent.getPiece())).toString());
         if (!moveService.validMove(new CurrentPosition(pieceCurrent.getChessGame().getId(), pieceCurrent.getRowIdx(), pieceCurrent.getColIdx(), pieceCurrent.isWhite(), pieceCurrent.getPiece()))
                 .contains(new NewPosition(request.getRowNew(), request.getColNew())))
             throw new CustomException("You cannot move here", HttpStatus.BAD_REQUEST);

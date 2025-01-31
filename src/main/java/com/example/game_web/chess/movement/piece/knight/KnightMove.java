@@ -55,11 +55,11 @@ public class KnightMove {
         if (rowCur>1 && colCur<7 && !pieceRepo.existsByRowIdxAndColIdxAndWhiteAndChessGame(
                 rowCur - 2, colCur + 1, knight.isWhite(), game
         ))
-            listMove.add(NewPosition.builder().rowIdx(rowCur-1).colIdx(colCur-2).build());
+            listMove.add(NewPosition.builder().rowIdx(rowCur-2).colIdx(colCur+1).build());
         if (rowCur>1 && colCur>0 && !pieceRepo.existsByRowIdxAndColIdxAndWhiteAndChessGame(
                 rowCur - 2, colCur - 1, knight.isWhite(), game
         ))
-            listMove.add(NewPosition.builder().rowIdx(rowCur-1).colIdx(colCur-2).build());
+            listMove.add(NewPosition.builder().rowIdx(rowCur-2).colIdx(colCur-1).build());
         return listMove;
     }
 }

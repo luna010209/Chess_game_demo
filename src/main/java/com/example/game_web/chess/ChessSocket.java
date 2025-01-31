@@ -14,10 +14,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class ChessSocket {
     private final PlayService playService;
+    private final ChessController chessController;
     @MessageMapping("/move")
     @SendTo("/topic/move")
-    public ResponseDto makeMove(RequestDto requestDto){
-        return playService.play(requestDto);
+    public RequestDto makeMove(RequestDto dto){
+        return dto;
     }
 
     @MessageMapping("/pawn")

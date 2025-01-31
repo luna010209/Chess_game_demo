@@ -4,7 +4,13 @@ import com.example.game_web.chess.board.entity.ChessGame;
 import com.example.game_web.chess.board.entity.ChessPiece;
 import com.example.game_web.chess.board.repo.ChessGameRepo;
 import com.example.game_web.chess.board.repo.ChessPieceRepo;
+import com.example.game_web.chess.play.dto.ResponseDto;
+import com.example.game_web.exceptionHandler.CustomException;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class ChessInitialService {
@@ -84,5 +90,17 @@ public class ChessInitialService {
         pieceRepo.save(ChessPiece.builder()
                 .piece("king").white(false).rowIdx(7).colIdx(4).chessGame(startGame)
                 .build());
+    }
+
+    public List<ResponseDto> listPieces(Long gameId){
+        List<ResponseDto> dtos = new ArrayList<>();
+        ChessGame game = gameRepo.findById(gameId).orElseThrow(
+                ()-> new CustomException("No exist game", HttpStatus.BAD_REQUEST)
+        );
+        List<ChessPiece> pieces = pieceRepo.findByChessGame(game);
+        for (ChessPiece piece: pieces){
+            dtos.add(ResponseDto.fromEntity(piece));
+        }
+        return dtos;
     }
 }

@@ -17,9 +17,13 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("move")
 public class MoveController {
-    private final KingMove kingMove;
-    @PostMapping("king")
+    private final MoveService moveService;
+    @PostMapping
     public List<NewPosition> listMove(@RequestBody CurrentPosition current){
-        return kingMove.listMove(current);
+
+        if (current.getPiece().equals("king")){
+
+        }
+        return moveService.validMove(current);
     }
 }

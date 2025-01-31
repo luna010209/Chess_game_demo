@@ -24,15 +24,6 @@ public class CompleteEventListener implements ApplicationListener<CompleteEvent>
 
     @Override
     public void onApplicationEvent(CompleteEvent event) {
-        // Create a verification code for email of new user
-//        SecureRandom random = new SecureRandom();
-//        Integer verifiedCode = 100000 + random.nextInt(900000);
-            // In case of generating a string token: c4c31b74-847c-4ea7-a3bb-d2c68e1bdcf2
-            // String token = UUID.randomUUID().toString();
-        // Save into DB
-//        codeRepo.save(new VerifiedCode(event.getCodeVerify(), event.getEmail()));
-        log.info(event.getCodeVerify().toString());
-
         try {
             String subject = "Email Verification";
             String senderName = "Luna Do";
