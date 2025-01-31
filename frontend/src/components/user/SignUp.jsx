@@ -134,8 +134,8 @@ const SignUp = () => {
   return (
     <div style={{ fontFamily: 'Nanum Myeongjo, serif' }}>
       <div className="d-flex flex-wrap justify-content-center">
-        <div className="container-fluid border border-primary rounded bg-white shadow-lg
-                d-flex flex-wrap col-11 col-lg-9">
+        <div className="container-fluid border border-primary m-2 rounded bg-white shadow-lg
+                d-flex flex-wrap col-11 col-lg-7">
           <h2 className="w-100 text-center text-white" style={{ backgroundColor: 'darkblue' }}>Welcome to Luna's chess game</h2>
           <form className="w-100 text-start ps-3 pe-3" onSubmit={createUser}>
             <div className="form-group">
