@@ -3,21 +3,17 @@ import { useParams } from 'react-router-dom'
 import { board, movement, play } from '../../service/chess/ChessService';
 import { Client } from '@stomp/stompjs';
 import { produce } from 'immer';
+import ChessIcons from './ChessIcons';
 
 const Chess = () => {
   const { gameId } = useParams();
   const [curPiece, setCurPiece] = useState(null);
   let colorBase;
+  // let whiteTurn = true;
 
-  const pieceIcons = {
-    pawn: "♙",
-    knight: "♘",
-    bishop: "♗",
-    rook: "♖",
-    queen: "♕",
-    king: "♔",
-  };
   const [boardInit, setBoardInit] = useState(Array.from({ length: 8 }, () => Array(8).fill(null)));
+  const boardRef = useRef(boardInit);
+
   useEffect(() => {
     board(gameId).then(res => {
       const newBoard = Array.from({ length: 8 }, () => Array(8).fill(null));
@@ -28,6 +24,10 @@ const Chess = () => {
       setBoardInit(newBoard);
     })
   }, [gameId])
+  // Update boardInit inside client stomp
+  useEffect(() => {
+    boardRef.current = boardInit;
+  }, [boardInit]);
 
   const client = useRef(new Client({
     brokerURL: "ws://localhost:3000/game",
@@ -37,22 +37,25 @@ const Chess = () => {
     client.current.onConnect= ()=>{
       client.current.subscribe('/topic/move', res=>{
         const chessPiece = JSON.parse(res.body); 
-        setBoardInit(produce(draft => {
-          draft[chessPiece.rowNew][chessPiece.colNew] = chessPiece;
-          draft[chessPiece.rowCur][chessPiece.colCur] = null;
-        }));
+        console.log(chessPiece);
+        board(gameId).then(res => {
+          const newBoard = Array.from({ length: 8 }, () => Array(8).fill(null));
+          res.data.forEach(piece => {
+            // console.log(piece.pieceId);
+            newBoard[piece.rowIdx][piece.colIdx] = piece;
+          })
+          setBoardInit(newBoard);
+        })
       })
     }
   })
 
-  const getPiece = (piece)=>{
-    setCurPiece(piece);
-    console.log(piece);
-  }
-
-  const handleMove = (rowIdx, colIdx)=>{
-    console.log(rowIdx, colIdx);
-    if (curPiece){
+  const handleMove = (piece, rowIdx, colIdx)=>{
+    console.log("piece ", piece);
+    console.log("row: ", rowIdx);
+    console.log("col: ", colIdx);
+    if (piece && piece.white===piece.whiteTurn) setCurPiece(piece);
+    else if (curPiece){
       const requestData = {
         pieceId: curPiece.pieceId,
         gameId: gameId,
@@ -64,19 +67,21 @@ const Chess = () => {
         white: curPiece.white,
       }
 
-      movement(requestData).then(()=>{
-        play(client, requestData);
+      movement(requestData).then((res)=>{
+        play(client, res.data);
         setCurPiece(null);
+        // whiteTurn=!whiteTurn;
       }).catch(e=>{
         alert(e.response.data);
+        setCurPiece(null);
       })  
     }
   }
 
   return (
-    <div className='d-flex flex-wrap'>
-      <div className='col-12 col-lg-8 border border-1 d-flex flex-wrap justify-content-center ps-5 pe-5'>
-        <h1 className='w-100'>Class</h1>
+    <div className='d-flex flex-wrap p-3 justify-content-center'>
+      <div className='col-12 col-lg-8 border border-3 d-flex flex-wrap justify-content-center pt-3 pb-3'>
+        <h1 className='w-100 text-center text-success'>Luna's chess game</h1>
         <div className='border border-2'
           style={{
             display: "grid",
@@ -104,27 +109,19 @@ const Chess = () => {
                   height: "60px",
                   cursor: "pointer",
                 }}
-                // onDoubleClick={e=>{e.preventDefault(); setCurPiece(null)}}
-                onClick={()=>piece? getPiece(piece):handleMove(row, col)} 
+                onClick={()=>handleMove(piece, row, col)} 
               >
-                {piece && 
-                (<div
-                  style={{
-                    fontSize: "50px",
-                    fontWeight: 900,
-                    color: piece.white? "white": "black",
-                    textAlign: "center",
-                  }} 
-                >
-                  {pieceIcons[piece.piece]}
-                </div>)}
+                {piece && (<ChessIcons piece={piece}/>)}
               </div>
             );
           })}
         </div>
       </div>
-      <div className='d-none d-lg-flex col-3'>
-
+      <div className='d-none d-lg-flex col-3 border'>
+          {/* {boardInit[0][0].whiteTurn} */}
+          <div className=''>
+            White's turn 
+          </div>
       </div>
     </div>
   )
