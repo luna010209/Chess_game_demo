@@ -17,7 +17,7 @@ public class ChessSocket {
     private final ChessController chessController;
     @MessageMapping("/move")
     @SendTo("/topic/move")
-    public RequestDto makeMove(RequestDto dto){
+    public ResponseDto makeMove(ResponseDto dto){
         return dto;
     }
 

@@ -58,6 +58,7 @@ public class ResultService {
                 game.setStatus(ChessGame.Status.DRAW);
         }
         gameRepo.save(game);
+        return;
     }
 
     public void win(Long gameId){
@@ -67,5 +68,6 @@ public class ResultService {
         if (!pieceRepo.existsByPieceAndWhiteAndChessGame("king", !game.isWhiteTurn(), game))
             game.setStatus(ChessGame.Status.WIN);
         gameRepo.save(game);
+        return;
     }
 }

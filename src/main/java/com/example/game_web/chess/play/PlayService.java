@@ -46,7 +46,7 @@ public class PlayService {
             throw new CustomException("It's not your turn", HttpStatus.BAD_REQUEST);
 
         // Check if current piece can move or not
-        log.info(moveService.validMove(new CurrentPosition(pieceCurrent.getChessGame().getId(), pieceCurrent.getRowIdx(), pieceCurrent.getColIdx(), pieceCurrent.isWhite(), pieceCurrent.getPiece())).toString());
+//        log.info(moveService.validMove(new CurrentPosition(pieceCurrent.getChessGame().getId(), pieceCurrent.getRowIdx(), pieceCurrent.getColIdx(), pieceCurrent.isWhite(), pieceCurrent.getPiece())).toString());
         if (!moveService.validMove(new CurrentPosition(pieceCurrent.getChessGame().getId(), pieceCurrent.getRowIdx(), pieceCurrent.getColIdx(), pieceCurrent.isWhite(), pieceCurrent.getPiece()))
                 .contains(new NewPosition(request.getRowNew(), request.getColNew())))
             throw new CustomException("You cannot move here", HttpStatus.BAD_REQUEST);
@@ -65,41 +65,31 @@ public class PlayService {
 
         // Update new position
         Optional<ChessPiece> pieceNewPos = pieceRepo.findByRowIdxAndColIdxAndChessGame(request.getRowNew(), request.getColNew(), game);
-        ChessPiece pieceNew;
-        if (pieceNewPos.isEmpty()){
-            pieceNew = ChessPiece.builder()
-                    .piece(pieceCurrent.getPiece())
-                    .rowIdx(request.getRowNew())
-                    .colIdx(request.getColNew())
-                    .white(pieceCurrent.isWhite())
-                    .chessGame(game)
-                    .build();
-        } else {
-            pieceNew = pieceNewPos.get();
-            pieceNew.setPiece(pieceCurrent.getPiece());
-            pieceNew.setWhite(pieceCurrent.isWhite());
-        }
-        pieceRepo.save(pieceNew);
+        pieceNewPos.ifPresent(pieceRepo::delete);
 
-        // Delete current(old) position
-        pieceRepo.delete(pieceCurrent);
+        pieceCurrent.setRowIdx(request.getRowNew());
+        pieceCurrent.setColIdx(request.getColNew());
+
+        pieceRepo.save(pieceCurrent);
 
         // Change status of king threaten if necessary
-        if (game.isKingDanger()) game.setKingDanger(false);
+        if (game.isKingDanger()) {
+            game.setKingDanger(false);
+            game = gameRepo.save(game);
+        }
 
         // Check if the game finish(king was taken out or not)
-//        if (!pieceRepo.existsByPieceAndWhiteAndChessGame("king", !game.isWhiteTurn(), game))
-//            game.setFinish(true);
         resultService.draw(game.getId(), pieceCurrent.isWhite());
-
-        // Change turn
-        game.setWhiteTurn(!game.isWhiteTurn());
+        resultService.win(game.getId());
+        if (game.getStatus().equals(ChessGame.Status.DRAW) || game.getStatus().equals(ChessGame.Status.WIN))
+            return ResponseDto.fromEntity(pieceRepo.pieceWithGame(pieceCurrent.getId()));
 
         // Check if king is threatened or not
             // 1. List of position that new piece can move
+
         List<NewPosition> listMoveOfNewPos = moveService.validMove(CurrentPosition.builder()
-                        .rowIdx(pieceNew.getRowIdx()).colIdx(pieceNew.getColIdx())
-                        .piece(pieceNew.getPiece()).white(pieceNew.isWhite())
+                        .rowIdx(pieceCurrent.getRowIdx()).colIdx(pieceCurrent.getColIdx())
+                        .piece(pieceCurrent.getPiece()).white(pieceCurrent.isWhite())
                         .gameId(game.getId())
                 .build());
 
@@ -110,8 +100,15 @@ public class PlayService {
             // 3. Check if king exists into list movement or not.
         if (listMoveOfNewPos.contains(new NewPosition(king.getRowIdx(), king.getColIdx())))
             game.setKingDanger(true);
+
+        // Change turn
+        game.setWhiteTurn(!game.isWhiteTurn());
+
         gameRepo.save(game);
-        return ResponseDto.fromEntity(pieceRepo.pieceWithGame(pieceNew.getId()));
+        ResponseDto dto = ResponseDto.fromEntity(pieceRepo.pieceWithGame(pieceCurrent.getId()));
+//        dto.setColPre(request.getColCur());
+//        dto.setRowPre(request.getRowCur());
+        return dto;
     }
 
 
@@ -131,7 +128,8 @@ public class PlayService {
         // Change pawn to another piece
         pawn.setPiece(requestDto.getPiece());
         pieceRepo.save(pawn);
-        return ResponseDto.fromEntity(pieceRepo.pieceWithGame(pawn.getId()));
+        ResponseDto dto = ResponseDto.fromEntity(pieceRepo.pieceWithGame(pawn.getId()));
+        return dto;
     }
 
 

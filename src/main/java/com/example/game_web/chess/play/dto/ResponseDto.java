@@ -20,6 +20,8 @@ public class ResponseDto {
     private boolean kingDanger;
 //    private boolean finish;
     private String status;
+    private int colPre;
+    private int rowPre;
     public static ResponseDto fromEntity(ChessPiece piece){
         ResponseDto dto = ResponseDto.builder()
                 .pieceId(piece.getId())

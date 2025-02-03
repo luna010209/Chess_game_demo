@@ -28,26 +28,28 @@ public class QueenMove {
         int rowCur = queen.getRowIdx();
         int colLoop = colCur;
         for (int row = rowCur -1; row>=0; row--){
-            if (colLoop++<7 && !pieceRepo.existsByRowIdxAndColIdxAndWhiteAndChessGame(
-                    row, colLoop+++1, queen.isWhite(), game
+            int col = colLoop+++1;
+            if (col<8 && !pieceRepo.existsByRowIdxAndColIdxAndWhiteAndChessGame(
+                    row, col, queen.isWhite(), game
             )) {
-                list.add(NewPosition.builder().rowIdx(row).colIdx(colLoop+++1).build());
+                list.add(NewPosition.builder().rowIdx(row).colIdx(col).build());
                 // If the position has opponent's piece, break the loop
                 if (pieceRepo.existsByRowIdxAndColIdxAndWhiteAndChessGame(
-                        row, colLoop+++1, !queen.isWhite(), game
+                        row, col, !queen.isWhite(), game
                 )) break;
             }
             else break;
         }
         colLoop = colCur;
         for (int row = rowCur -1; row>=0; row--){
-            if (colLoop-->0 && !pieceRepo.existsByRowIdxAndColIdxAndWhiteAndChessGame(
-                    row, colLoop---1, queen.isWhite(), game
+            int col = colLoop---1;
+            if (col>=0 && !pieceRepo.existsByRowIdxAndColIdxAndWhiteAndChessGame(
+                    row, col, queen.isWhite(), game
             )) {
-                list.add(NewPosition.builder().rowIdx(row).colIdx(colLoop---1).build());
+                list.add(NewPosition.builder().rowIdx(row).colIdx(col).build());
                 // If the position has opponent's piece, break the loop
                 if (pieceRepo.existsByRowIdxAndColIdxAndWhiteAndChessGame(
-                        row, colLoop---1, !queen.isWhite(), game
+                        row, col, !queen.isWhite(), game
                 )) break;
             }
             else break;
@@ -64,26 +66,28 @@ public class QueenMove {
         }
         colLoop = colCur;
         for (int row = rowCur +1; row<8; row++){
-            if (colLoop++<7 && !pieceRepo.existsByRowIdxAndColIdxAndWhiteAndChessGame(
-                    row, colLoop+++1, queen.isWhite(), game
+            int col = colLoop+++1;
+            if (col<8 && !pieceRepo.existsByRowIdxAndColIdxAndWhiteAndChessGame(
+                    row, col, queen.isWhite(), game
             )) {
-                list.add(NewPosition.builder().rowIdx(row).colIdx(colLoop+++1).build());
+                list.add(NewPosition.builder().rowIdx(row).colIdx(col).build());
                 // If the position has opponent's piece, break the loop
                 if (pieceRepo.existsByRowIdxAndColIdxAndWhiteAndChessGame(
-                        row, colLoop+++1, !queen.isWhite(), game
+                        row, col, !queen.isWhite(), game
                 )) break;
             }
             else break;
         }
         colLoop = colCur;
         for (int row = rowCur +1; row<8; row++){
-            if (colLoop-->0 && !pieceRepo.existsByRowIdxAndColIdxAndWhiteAndChessGame(
-                    row, colLoop---1, queen.isWhite(), game
+            int col = colLoop---1;
+            if (col>=0 && !pieceRepo.existsByRowIdxAndColIdxAndWhiteAndChessGame(
+                    row, col, queen.isWhite(), game
             )) {
-                list.add(NewPosition.builder().rowIdx(row).colIdx(colLoop---1).build());
+                list.add(NewPosition.builder().rowIdx(row).colIdx(col).build());
                 // If the position has opponent's piece, break the loop
                 if (pieceRepo.existsByRowIdxAndColIdxAndWhiteAndChessGame(
-                        row, colLoop---1, !queen.isWhite(), game
+                        row, col, !queen.isWhite(), game
                 )) break;
             }
             else break;
