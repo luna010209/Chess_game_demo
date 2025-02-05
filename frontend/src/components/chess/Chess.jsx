@@ -2,8 +2,8 @@ import React, { useEffect, useRef, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { board, movement, play } from '../../service/chess/ChessService';
 import { Client } from '@stomp/stompjs';
-import { produce } from 'immer';
 import ChessIcons from './ChessIcons';
+import ChessNotification from './ChessNotification';
 
 const Chess = () => {
   const { gameId } = useParams();
@@ -12,7 +12,7 @@ const Chess = () => {
   // let whiteTurn = true;
 
   const [boardInit, setBoardInit] = useState(Array.from({ length: 8 }, () => Array(8).fill(null)));
-  const boardRef = useRef(boardInit);
+  // const boardRef = useRef(boardInit);
 
   useEffect(() => {
     board(gameId).then(res => {
@@ -22,12 +22,16 @@ const Chess = () => {
         newBoard[piece.rowIdx][piece.colIdx] = piece;
       })
       setBoardInit(newBoard);
-    })
+    }).catch(e=>{
+      alert(e.response.data);
+    });
   }, [gameId])
   // Update boardInit inside client stomp
-  useEffect(() => {
-    boardRef.current = boardInit;
-  }, [boardInit]);
+  // useEffect(() => {
+  //   boardRef.current = boardInit;
+  // }, [boardInit]);
+  
+  // console.log(boardInit[0][0]);
 
   const client = useRef(new Client({
     brokerURL: "ws://localhost:3000/game",
@@ -37,7 +41,7 @@ const Chess = () => {
     client.current.onConnect= ()=>{
       client.current.subscribe('/topic/move', res=>{
         const chessPiece = JSON.parse(res.body); 
-        console.log(chessPiece);
+        // console.log(chessPiece);
         board(gameId).then(res => {
           const newBoard = Array.from({ length: 8 }, () => Array(8).fill(null));
           res.data.forEach(piece => {
@@ -45,15 +49,14 @@ const Chess = () => {
             newBoard[piece.rowIdx][piece.colIdx] = piece;
           })
           setBoardInit(newBoard);
-        })
+        }).catch(e=>{
+          alert(e.response.data);
+        });
       })
     }
   })
 
   const handleMove = (piece, rowIdx, colIdx)=>{
-    console.log("piece ", piece);
-    console.log("row: ", rowIdx);
-    console.log("col: ", colIdx);
     if (piece && piece.white===piece.whiteTurn) setCurPiece(piece);
     else if (curPiece){
       const requestData = {
@@ -81,7 +84,7 @@ const Chess = () => {
   return (
     <div className='d-flex flex-wrap p-3 justify-content-center'>
       <div className='col-12 col-lg-8 border border-3 d-flex flex-wrap justify-content-center pt-3 pb-3'>
-        <h1 className='w-100 text-center text-success'>Luna's chess game</h1>
+        <h1 className='w-100 text-center text-bg-success rounded'>Luna's chess game</h1>
         <div className='border border-2'
           style={{
             display: "grid",
@@ -117,11 +120,14 @@ const Chess = () => {
           })}
         </div>
       </div>
-      <div className='d-none d-lg-flex col-3 border'>
-          {/* {boardInit[0][0].whiteTurn} */}
-          <div className=''>
-            White's turn 
+      <div className='d-none d-lg-flex flex-wrap col-3 border justify-content-center align-items-center p-2'>
+        {(<ChessNotification boardInit={boardInit} gameId={gameId}/>)}
+          {/* <div className='w-100 d-flex flex-wrap justify-content-center'>
+            <h1 className='bg-success-subtle text-white text-center'>White's turn</h1>
+            <h3 className='text-center text-danger'>Your king is threatened right now!!!</h3>
+            <button className='text-center btn btn-outline-success'>Reset game</button>
           </div>
+           */}
       </div>
     </div>
   )

@@ -14,3 +14,11 @@ export const play = (client, requestDto)=>{
       body: JSON.stringify(requestDto),
   })
 }
+
+export const game = (gameId)=>{
+  return axios.get("/chess-game/game"+gameId);
+}
+
+export const resetGame= (gameId)=>{
+  return axios.post("/chess-game/reset/"+gameId);
+}
