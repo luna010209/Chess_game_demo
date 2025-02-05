@@ -2,6 +2,7 @@ package com.example.game_web.chess;
 
 import com.example.game_web.chess.board.service.ChessInitialService;
 import com.example.game_web.chess.play.PlayService;
+import com.example.game_web.chess.play.dto.GameDto;
 import com.example.game_web.chess.play.dto.RequestDto;
 import com.example.game_web.chess.play.dto.ResponseDto;
 import lombok.RequiredArgsConstructor;
@@ -29,5 +30,15 @@ public class ChessController {
     @PostMapping("play")
     public ResponseDto play(@RequestBody RequestDto request){
         return playService.play(request);
+    }
+
+    @GetMapping("game{gameId}")
+    public GameDto game(@PathVariable("gameId") Long gameId){
+        return chessInitialService.game(gameId);
+    }
+
+    @PostMapping("reset/{gameId}")
+    public GameDto resetGame(@PathVariable("gameId") Long gameId){
+        return chessInitialService.resetGame(gameId);
     }
 }

@@ -4,6 +4,7 @@ import com.example.game_web.chess.board.entity.ChessGame;
 import com.example.game_web.chess.board.entity.ChessPiece;
 import com.example.game_web.chess.board.repo.ChessGameRepo;
 import com.example.game_web.chess.board.repo.ChessPieceRepo;
+import com.example.game_web.chess.play.dto.GameDto;
 import com.example.game_web.chess.play.dto.ResponseDto;
 import com.example.game_web.exceptionHandler.CustomException;
 import org.springframework.http.HttpStatus;
@@ -22,7 +23,7 @@ public class ChessInitialService {
         initializeGame();
     }
 
-    public void initializeGame(){
+    public GameDto initializeGame(){
         ChessGame startGame = new ChessGame();
         gameRepo.save(startGame);
         for (int col=0; col<8; col++){
@@ -90,6 +91,7 @@ public class ChessInitialService {
         pieceRepo.save(ChessPiece.builder()
                 .piece("king").white(false).rowIdx(7).colIdx(4).chessGame(startGame)
                 .build());
+        return GameDto.dto(startGame);
     }
 
     public List<ResponseDto> listPieces(Long gameId){
@@ -102,5 +104,24 @@ public class ChessInitialService {
             dtos.add(ResponseDto.fromEntity(piece));
         }
         return dtos;
+    }
+
+    public GameDto game(Long id){
+        ChessGame chessGame = gameRepo.findById(id).orElseThrow(
+                ()-> new CustomException("No exist game", HttpStatus.BAD_REQUEST)
+        );
+        return GameDto.dto(chessGame);
+    }
+
+    public GameDto resetGame(Long gameId){
+        ChessGame game = gameRepo.findById(gameId).orElseThrow(
+                ()-> new CustomException("No exist game", HttpStatus.BAD_REQUEST)
+        );
+        List<ChessPiece> pieces = pieceRepo.findByChessGame(game);
+        for (ChessPiece piece: pieces){
+            pieceRepo.delete(piece);
+        }
+        gameRepo.delete(game);
+        return this.initializeGame();
     }
 }

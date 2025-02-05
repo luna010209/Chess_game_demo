@@ -33,13 +33,13 @@ public class PawnMove {
                 if (rowCur==1 && !pieceRepo.existsByRowIdxAndColIdxAndChessGame(
                         rowCur+2, colCur, game
                 )) list.add(NewPosition.builder().rowIdx(rowCur+2).colIdx(colCur).build());
-                if (pieceRepo.existsByRowIdxAndColIdxAndWhiteAndChessGame(
-                        rowCur+1, colCur+1, !pawn.isWhite(), game
-                )) list.add(NewPosition.builder().rowIdx(rowCur+1).colIdx(colCur+1).build());
-                if (pieceRepo.existsByRowIdxAndColIdxAndWhiteAndChessGame(
-                        rowCur+1, colCur-1, !pawn.isWhite(), game
-                )) list.add(NewPosition.builder().rowIdx(rowCur+1).colIdx(colCur-1).build());
             }
+            if (pieceRepo.existsByRowIdxAndColIdxAndWhiteAndChessGame(
+                    rowCur+1, colCur+1, !pawn.isWhite(), game
+            )) list.add(NewPosition.builder().rowIdx(rowCur+1).colIdx(colCur+1).build());
+            if (pieceRepo.existsByRowIdxAndColIdxAndWhiteAndChessGame(
+                    rowCur+1, colCur-1, !pawn.isWhite(), game
+            )) list.add(NewPosition.builder().rowIdx(rowCur+1).colIdx(colCur-1).build());
         } else {
             if (rowCur>0 && !pieceRepo.existsByRowIdxAndColIdxAndChessGame(
                     rowCur-1, colCur, game
@@ -48,13 +48,13 @@ public class PawnMove {
                 if (rowCur==6 && !pieceRepo.existsByRowIdxAndColIdxAndChessGame(
                         rowCur-2, colCur, game
                 )) list.add(NewPosition.builder().rowIdx(rowCur-2).colIdx(colCur).build());
-                if (pieceRepo.existsByRowIdxAndColIdxAndWhiteAndChessGame(
-                        rowCur-1, colCur+1, !pawn.isWhite(), game
-                )) list.add(NewPosition.builder().rowIdx(rowCur-1).colIdx(colCur+1).build());
-                if (pieceRepo.existsByRowIdxAndColIdxAndWhiteAndChessGame(
-                        rowCur-1, colCur-1, !pawn.isWhite(), game
-                )) list.add(NewPosition.builder().rowIdx(rowCur-1).colIdx(colCur-1).build());
             }
+            if (pieceRepo.existsByRowIdxAndColIdxAndWhiteAndChessGame(
+                    rowCur-1, colCur+1, !pawn.isWhite(), game
+            )) list.add(NewPosition.builder().rowIdx(rowCur-1).colIdx(colCur+1).build());
+            if (pieceRepo.existsByRowIdxAndColIdxAndWhiteAndChessGame(
+                    rowCur-1, colCur-1, !pawn.isWhite(), game
+            )) list.add(NewPosition.builder().rowIdx(rowCur-1).colIdx(colCur-1).build());
         }
         return list;
     }
