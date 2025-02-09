@@ -1,0 +1,9 @@
+Steps to create chat-bot ai
+1. Install Dependencies:
+
+Install all necessary libraries in terminal: 
+    `pip install fastapi uvicorn python-chess numpy torch tensorflow keras stable-baselines3`
+    `pip list` to check all dependencies.
+
+2. Create main.py with FastAPI
+ ** How to run fastapi: `python -m uvicorn main:app --reload`
