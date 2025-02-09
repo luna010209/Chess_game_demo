@@ -5,7 +5,7 @@ from stockfish import Stockfish;
 
 app= FastAPI();
 
-stockfish = Stockfish(path="stockfish")
+stockfish = Stockfish(path="stockfish-windows-x86-64-avx2\stockfish\stockfish-windows-x86-64-avx2.exe")
 
 @app.get("/ai/")
 def read_root():
