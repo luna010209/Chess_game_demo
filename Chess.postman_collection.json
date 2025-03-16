@@ -1,0 +1,64 @@
+{
+	"info": {
+		"_postman_id": "fe3d1ebf-7e24-485e-934e-cc43b5915502",
+		"name": "Chess",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "37757111"
+	},
+	"item": [
+		{
+			"name": "/chess",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8080/chess",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8080",
+					"path": [
+						"chess"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/chess/play",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"gameId\": 1,\r\n    \"piece\": \"pawn\",\r\n    \"rowCur\": 1,\r\n    \"colCur\": 4,\r\n    \"rowNew\": 2,\r\n    \"colNew\": 4,\r\n    \"white\": true\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8080/chess/play",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8080",
+					"path": [
+						"chess",
+						"play"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
